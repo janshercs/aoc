@@ -14,7 +14,7 @@ func TestGetStacks(t *testing.T) {
 		panic(err)
 	}
 	defer f.Close()
-	t.Error(GetStacks(f))
+	// t.Error(GetStacks(f)) // using this for visual checks, i'm lazy to write a test for this
 }
 
 func TestGetStackInput(t *testing.T) {
@@ -23,7 +23,7 @@ line2
 `
 	r := strings.NewReader(in)
 
-	input, _ := getStackInput(r)
+	input := getStackInput(r)
 	assert.Equal(t, []string{"line1", "line2"}, input)
 }
 

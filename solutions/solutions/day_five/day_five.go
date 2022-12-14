@@ -24,7 +24,14 @@ func SolutionA() string {
 	}
 	defer f.Close()
 
-	stacks, scanner := GetStacks(f)
+	stacks := GetStacks(f)
+	f.Seek(0, 0) // reset to start of file again
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() { // consuming till start of instructions
+		if scanner.Text() == utils.EmptyString {
+			break
+		}
+	}
 
 	for scanner.Scan() {
 		instr := parseInstruction(scanner.Text())
@@ -49,7 +56,15 @@ func SolutionB() string {
 	}
 	defer f.Close()
 
-	stacks, scanner := GetStacks(f)
+	stacks := GetStacks(f)
+
+	f.Seek(0, 0) // reset to start of file again
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() { // consuming till start of instructions
+		if scanner.Text() == utils.EmptyString {
+			break
+		}
+	}
 
 	for scanner.Scan() {
 		instr := parseInstruction(scanner.Text())
@@ -67,8 +82,8 @@ func SolutionB() string {
 	return sb.String()
 }
 
-func GetStacks(f *os.File) (stacks, *bufio.Scanner) {
-	stackInput, scanner := getStackInput(f)
+func GetStacks(f *os.File) stacks {
+	stackInput := getStackInput(f)
 	numberOfStacks := getNCols(stackInput[len(stackInput)-1])
 	stacks := make([]stack, numberOfStacks+stackOffset)
 
@@ -83,10 +98,10 @@ func GetStacks(f *os.File) (stacks, *bufio.Scanner) {
 	for i := range stacks {
 		stacks[i].Reverse()
 	}
-	return stacks, scanner
+	return stacks
 }
 
-func getStackInput(f io.Reader) ([]string, *bufio.Scanner) {
+func getStackInput(f io.Reader) []string {
 	scanner := bufio.NewScanner(f)
 	input := []string{}
 	for scanner.Scan() {
@@ -96,7 +111,7 @@ func getStackInput(f io.Reader) ([]string, *bufio.Scanner) {
 		}
 		input = append(input, line)
 	}
-	return input, scanner
+	return input
 }
 
 func getNCols(s string) int {
