@@ -126,9 +126,6 @@ func solutionB() int {
 	nCols := getNCols(grid)
 	nRows := getNRows(grid)
 
-	// make empty grid
-	// gridMarker := makeGrid(nCols, nRows)
-
 	highest := 0
 	for i := 0; i < nRows; i++ {
 		for j := 0; j < nCols; j++ {
