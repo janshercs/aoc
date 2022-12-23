@@ -72,6 +72,8 @@ func getTailDisplacement(head, tail point) point {
 		return point{0, -1}
 	}
 
+	// Handle diagonal movements
+
 	x, y := -1, -1
 
 	if headIsRight(head, tail) {
