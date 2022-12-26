@@ -3,7 +3,6 @@ package daythirteen
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"reflect"
@@ -112,18 +111,6 @@ func convertToList(a interface{}) []interface{} {
 	return []interface{}{a}
 }
 
-func truncateToOneMemberList(a interface{}) []interface{} {
-	if reflect.TypeOf(a).Kind() == reflect.Slice {
-		aSlice := a.([]interface{})
-		if len(aSlice) > 0 {
-			return []interface{}{aSlice[0]} // returns only 1 member
-		}
-		return aSlice // returns empty slice
-	}
-	// if not slice, it's integer
-	return []interface{}{a}
-}
-
 func solutionA() int {
 	f, err := os.Open("./day_thirteen.txt")
 	if err != nil {
@@ -139,8 +126,6 @@ func solutionA() int {
 			indexes = append(indexes, i)
 		}
 	}
-
-	fmt.Printf("indexes that are correct: %v", indexes)
 
 	sum := len(indexes) // to take care of the 1 based system they want us to sum in.
 	for _, i := range indexes {
@@ -185,16 +170,20 @@ func solutionB() int {
 	sort.Sort(pArray)
 
 	decoderIndex := []int{}
-	for _, p := range pArray {
-		fmt.Println(p)
-		// need to figure out how to compare interface!!
+	for i, p := range pArray {
+		if len(p) != 1 || reflect.TypeOf(p[0]).Kind() != reflect.Slice {
+			continue
+		}
 
-		// if len(p) == 1 {
-		// 	if p[0] == parseLine("[[6]]")[0] || p[0] == parseLine("[[2]]")[0] {
-		// 		decoderIndex = append(decoderIndex, i+1)
-		// 	}
-		// }
+		pSlice := p[0].([]interface{}) // have to force it to []interface{} to compare the final interface{} that is inside
+
+		if len(pSlice) != 1 {
+			continue
+		}
+
+		if pSlice[0].(float64) == float64(6) || pSlice[0].(float64) == float64(2) {
+			decoderIndex = append(decoderIndex, i+1)
+		}
 	}
-	fmt.Println(decoderIndex)
-	return 0
+	return decoderIndex[0] * decoderIndex[1]
 }

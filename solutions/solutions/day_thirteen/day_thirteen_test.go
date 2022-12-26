@@ -130,6 +130,6 @@ func TestInOrder(t *testing.T) {
 }
 
 func TestSolution(t *testing.T) {
-	// assert.Equal(t, 5503, solutionA())
-	assert.Equal(t, 0, solutionB())
+	assert.Equal(t, 5503, solutionA())
+	assert.Equal(t, 20952, solutionB())
 }
